@@ -378,19 +378,6 @@ export default function CartAndCheckout({
                     <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. 303-555-0192" className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
                   </div>
                 </div>
-                <div className="mt-5 pt-4 border-t border-slate-100 text-xs">
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Shipping Method</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button type="button" onClick={() => setShippingMethod('standard')} className={`rounded-2xl border p-4 text-left text-xs transition-all ${shippingMethod === 'standard' ? 'border-slate-900 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
-                      <div className="font-bold">Standard Delivery</div>
-                      <div className="text-slate-400 mt-1">2-3 days</div>
-                    </button>
-                    <button type="button" onClick={() => setShippingMethod('express')} className={`rounded-2xl border p-4 text-left text-xs transition-all ${shippingMethod === 'express' ? 'border-slate-900 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
-                      <div className="font-bold">Express Delivery</div>
-                      <div className="text-slate-400 mt-1">Next day</div>
-                    </button>
-                  </div>
-                </div>
                 <div className="mt-5 pt-5 border-t border-slate-100 text-xs text-slate-500">
                   <label className="block text-xs font-bold text-slate-700 mb-1">Note to Artisan</label>
                   <textarea value={artisanNote} onChange={(e) => setArtisanNote(e.target.value)} rows={3} placeholder="Write special instructions for your order..." className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
