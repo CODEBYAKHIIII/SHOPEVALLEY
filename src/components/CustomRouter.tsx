@@ -68,6 +68,12 @@ export function parseHash(hash: string): RouteState {
     routeState.path = 'verify-otp';
   } else if (segments[0] === 'admin') {
     routeState.path = 'admin';
+  } else if (segments[0] === 'profile') {
+    routeState.path = 'profile';
+  } else if (segments[0] === 'my-orders') {
+    routeState.path = 'my-orders';
+  } else if (segments[0] === 'notifications') {
+    routeState.path = 'notifications';
   } else {
     routeState.path = '/';
   }

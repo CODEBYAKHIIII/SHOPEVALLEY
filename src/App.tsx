@@ -12,6 +12,9 @@ import VendorPortal from './components/VendorPortal';
 import LoginScreen from './components/LoginScreen';
 import AdminPanel from './components/AdminPanel';
 import ProductDetailView from './components/ProductDetailView';
+import ProfilePage from './components/ProfilePage';
+import MyOrdersPage from './components/MyOrdersPage';
+import NotificationsPage from './components/NotificationsPage';
 import { PRODUCTS, VENDORS } from './data';
 import { Product, Vendor, CartItem, Order, LoggedUser, ProductVariant } from './types';
 import { 
@@ -709,6 +712,27 @@ export default function App() {
         {/* VIEW 5: REAL-TIME COURIER DELIVERY MAP AND TIMELINE */}
         {(route.path === 'track-order' || route.path === 'order-status') ? (
           <OrderTracker orders={orders} initialOrderId={route.orderId} />
+        ) : null}
+
+        {/* BUYER ACCOUNT PAGES */}
+        {route.path === 'profile' ? (
+          <ProfilePage 
+            currentUser={currentUser}
+            onUpdateUser={setCurrentUser}
+          />
+        ) : null}
+
+        {route.path === 'my-orders' ? (
+          <MyOrdersPage 
+            orders={orders}
+            onNavigate={navigate}
+          />
+        ) : null}
+
+        {route.path === 'notifications' ? (
+          <NotificationsPage 
+            onNavigate={navigate}
+          />
         ) : null}
 
         {/* VIEW 6: THE MULTI-VENDOR MERCHANT REGISTRATION AND CATALOG portal MODULE */}

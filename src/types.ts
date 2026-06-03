@@ -135,8 +135,25 @@ export interface Order {
   }[];
 }
 
+export interface SavedAddress {
+  id: string;
+  label: string; // e.g., "Home", "Work", "Mom's House"
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  isDefault: boolean;
+  createdAt: string;
+}
+
 export interface LoggedUser {
   name: string;
   email: string;
+  phoneNumber?: string;
   role: 'ADMIN' | 'BUYER';
+  profileImage?: string;
+  addresses: SavedAddress[];
 }

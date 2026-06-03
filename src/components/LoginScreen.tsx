@@ -13,7 +13,7 @@ import {
   Sparkles,
   Info
 } from 'lucide-react';
-import { LoggedUser } from '../types';
+import { LoggedUser, SavedAddress } from '../types';
 
 interface LoginScreenProps {
   onNavigate: (path: string) => void;
@@ -81,7 +81,8 @@ export default function LoginScreen({ onNavigate, onLoginSuccess }: LoginScreenP
       const adminUser: LoggedUser = {
         name: 'Shopevalley Administrator',
         email: 'admin@shopevalley.com',
-        role: 'ADMIN'
+        role: 'ADMIN',
+        addresses: []
       };
       // Log in and navigate to portal
       onLoginSuccess(adminUser);
@@ -98,10 +99,41 @@ export default function LoginScreen({ onNavigate, onLoginSuccess }: LoginScreenP
     );
 
     if (foundMatch) {
+      const sampleAddresses: SavedAddress[] = [
+        {
+          id: '1',
+          label: 'Home',
+          fullName: foundMatch.name,
+          email: foundMatch.email,
+          phoneNumber: '303-555-0123',
+          address: '123 Main Street',
+          city: 'Denver',
+          state: 'Colorado',
+          zipCode: '80202',
+          isDefault: true,
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: '2',
+          label: 'Work',
+          fullName: foundMatch.name,
+          email: foundMatch.email,
+          phoneNumber: '303-555-0456',
+          address: '456 Business Ave',
+          city: 'Boulder',
+          state: 'Colorado',
+          zipCode: '80301',
+          isDefault: false,
+          createdAt: new Date().toISOString()
+        }
+      ];
+
       const buyerUser: LoggedUser = {
         name: foundMatch.name,
         email: foundMatch.email,
-        role: 'BUYER'
+        phoneNumber: foundMatch.phoneNumber,
+        role: 'BUYER',
+        addresses: sampleAddresses
       };
       onLoginSuccess(buyerUser);
       onNavigate('');
@@ -186,10 +218,28 @@ export default function LoginScreen({ onNavigate, onLoginSuccess }: LoginScreenP
     localStorage.setItem('sv_registered_users', JSON.stringify(existingUsers));
 
     // Log the user in
+    const sampleAddresses: SavedAddress[] = [
+      {
+        id: '1',
+        label: 'Home',
+        fullName: regName,
+        email: regEmail.trim().toLowerCase(),
+        phoneNumber: '303-555-0123',
+        address: '123 Main Street',
+        city: 'Denver',
+        state: 'Colorado',
+        zipCode: '80202',
+        isDefault: true,
+        createdAt: new Date().toISOString()
+      }
+    ];
+
     const buyerSession: LoggedUser = {
       name: regName,
       email: regEmail.trim().toLowerCase(),
-      role: 'BUYER'
+      phoneNumber: '303-555-0123',
+      role: 'BUYER',
+      addresses: sampleAddresses
     };
     
     onLoginSuccess(buyerSession);

@@ -525,7 +525,7 @@ export default function Header({
                     <button 
                       onClick={() => {
                         setShowAccountPopover(false);
-                        notifyUser("Profile Settings panel loaded.");
+                        onNavigate('profile');
                       }}
                       className="w-full h-12 px-4 hover:bg-slate-50 text-slate-705 text-slate-700 font-extrabold text-xs flex items-center gap-3.5 transition-colors border-b border-slate-100 last:border-0 rounded-lg cursor-pointer"
                     >
@@ -537,7 +537,7 @@ export default function Header({
                     <button 
                       onClick={() => {
                         setShowAccountPopover(false);
-                        onNavigate('track-order');
+                        onNavigate('my-orders');
                       }}
                       className="w-full h-12 px-4 hover:bg-slate-50 text-slate-700 font-extrabold text-xs flex items-center gap-3.5 transition-colors border-b border-slate-100 last:border-0 rounded-lg cursor-pointer"
                     >
@@ -557,23 +557,11 @@ export default function Header({
                       <span>Wishlist</span>
                     </button>
 
-                    {/* Addresses */}
-                    <button 
-                      onClick={() => {
-                        setShowAccountPopover(false);
-                        setShowLocationPopover(true);
-                      }}
-                      className="w-full h-12 px-4 hover:bg-slate-50 text-slate-700 font-extrabold text-xs flex items-center gap-3.5 transition-colors border-b border-slate-100 last:border-0 rounded-lg cursor-pointer"
-                    >
-                      <MapPin className="w-5 h-5 text-amber-500 shrink-0" />
-                      <span>Addresses</span>
-                    </button>
-
                     {/* Notifications */}
                     <button 
                       onClick={() => {
                         setShowAccountPopover(false);
-                        notifyUser("Notifications list up-to-date.");
+                        onNavigate('notifications');
                       }}
                       className="w-full h-12 px-4 hover:bg-slate-50 text-slate-700 font-extrabold text-xs flex items-center gap-3.5 transition-colors border-b border-slate-100 last:border-0 rounded-lg cursor-pointer"
                     >
