@@ -85,9 +85,9 @@ export default function CartAndCheckout({
   const selectedItems = cartItems.filter(item => selectedIds.includes(item.id));
 
   const shippingFee = shippingMethod === 'express' ? 7.99 : 2.99;
-  const tax = Math.round(selectedItems.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0) * 0.05 * 100) / 100;
+  const tax = 0;
   const subtotal = selectedItems.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
-  const total = Math.round((subtotal + shippingFee + tax) * 100) / 100;
+  const total = Math.round((subtotal + shippingFee) * 100) / 100;
 
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -383,11 +383,11 @@ export default function CartAndCheckout({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button type="button" onClick={() => setShippingMethod('standard')} className={`rounded-2xl border p-4 text-left text-xs transition-all ${shippingMethod === 'standard' ? 'border-slate-900 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-bold">Standard Delivery</div>
-                      <div className="text-slate-400 mt-1">{formatINR(shippingFee)} • 2-3 days</div>
+                      <div className="text-slate-400 mt-1">2-3 days</div>
                     </button>
                     <button type="button" onClick={() => setShippingMethod('express')} className={`rounded-2xl border p-4 text-left text-xs transition-all ${shippingMethod === 'express' ? 'border-slate-900 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-bold">Express Delivery</div>
-                      <div className="text-slate-400 mt-1">{formatINR(7.99)} • Next day</div>
+                      <div className="text-slate-400 mt-1">Next day</div>
                     </button>
                   </div>
                 </div>
@@ -432,7 +432,6 @@ export default function CartAndCheckout({
                 <div className="mt-6 border-t border-slate-100 pt-4 text-xs sm:text-sm">
                   <div className="flex justify-between mb-2"><span className="text-slate-500">Subtotal</span><span className="font-semibold text-slate-900">{formatINR(subtotal)}</span></div>
                   <div className="flex justify-between mb-2"><span className="text-slate-500">Shipping</span><span className="font-semibold text-slate-900">{formatINR(shippingFee)}</span></div>
-                  <div className="flex justify-between mb-2"><span className="text-slate-500">Tax</span><span className="font-semibold text-slate-900">{formatINR(tax)}</span></div>
                   <div className="flex justify-between pt-3 border-t border-slate-200 text-sm font-bold"><span>Total</span><span>{formatINR(total)}</span></div>
                 </div>
               </div>
@@ -532,9 +531,12 @@ export default function CartAndCheckout({
             <h3 className="font-bold text-sm tracking-wide uppercase font-sans border-b border-slate-800/80 pb-3 mb-4 text-slate-100">Order Summary</h3>
             <div className="space-y-3.5 text-xs">
               <div className="flex justify-between"><span className="text-slate-400">Selected Products</span><span className="font-extrabold text-slate-100">{formatINR(subtotal)}</span></div>
-              <div className="flex justify-between"><span className="text-slate-400">Shipping</span><span className="font-semibold text-slate-100">{formatINR(shippingFee)}</span></div>
-              <div className="flex justify-between"><span className="text-slate-400">Tax</span><span className="font-semibold text-slate-100">{formatINR(tax)}</span></div>
-              <div className="border-t border-slate-800 pt-3.5 mt-3.5 flex justify-between text-sm"><span className="font-extrabold text-amber-400 tracking-wide">Grand Total</span><span className="font-black text-lg text-white font-sans">{formatINR(total)}</span></div>
+              {(step === 'summary' || step === 'payment') && (
+                <>
+                  <div className="flex justify-between"><span className="text-slate-400">Shipping</span><span className="font-semibold text-slate-100">{formatINR(shippingFee)}</span></div>
+                  <div className="border-t border-slate-800 pt-3.5 mt-3.5 flex justify-between text-sm"><span className="font-extrabold text-amber-400 tracking-wide">Grand Total</span><span className="font-black text-lg text-white font-sans">{formatINR(total)}</span></div>
+                </>
+              )}
             </div>
             {step !== 'payment' && (
               <div className="mt-6 border-t border-slate-800/60 pt-4.5">
