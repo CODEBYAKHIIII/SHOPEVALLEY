@@ -694,7 +694,7 @@ export default function App() {
         ) : null}
 
         {/* VIEW 4: SEAMLESS SHOPPING CART AND MULTI-STEP CHECKOUT PORTAL */}
-        {route.path === 'cart' || route.path === 'checkout' || route.path === 'shipping-address' ? (
+        {route.path === 'cart' || route.path === 'checkout' || route.path === 'shipping-address' || route.path === 'order-summary' ? (
           <CartAndCheckout 
             cartItems={cart}
             onModifyQty={handleModifyQty}
@@ -707,7 +707,7 @@ export default function App() {
         ) : null}
 
         {/* VIEW 5: REAL-TIME COURIER DELIVERY MAP AND TIMELINE */}
-        {route.path === 'track-order' ? (
+        {(route.path === 'track-order' || route.path === 'order-status') ? (
           <OrderTracker orders={orders} initialOrderId={route.orderId} />
         ) : null}
 

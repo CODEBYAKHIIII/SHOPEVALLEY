@@ -45,8 +45,13 @@ export function parseHash(hash: string): RouteState {
     routeState.vendorId = decodeURIComponent(segments[1]);
   } else if (segments[0] === 'track-order' && segments[1]) {
     routeState.orderId = decodeURIComponent(segments[1]);
+  } else if (segments[0] === 'order-status' && segments[1]) {
+    routeState.path = 'order-status';
+    routeState.orderId = decodeURIComponent(segments[1]);
   } else if (segments[0] === 'checkout') {
     routeState.path = 'checkout';
+  } else if (segments[0] === 'order-summary') {
+    routeState.path = 'order-summary';
   } else if (segments[0] === 'shipping-address') {
     routeState.path = 'shipping-address';
   } else if (segments[0] === 'cart') {
