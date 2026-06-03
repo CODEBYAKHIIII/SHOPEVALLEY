@@ -59,6 +59,12 @@ export default function CartAndCheckout({
   const [phone, setPhone] = useState('');
   const [artisanNote, setArtisanNote] = useState('');
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
+  const [savedAddresses, setSavedAddresses] = useState<Array<{id: string; name: string; email: string; address: string; city: string; zipCode: string; phone: string}>>([
+    { id: '1', name: 'John Doe', email: 'john@example.com', address: '123 Main St', city: 'Denver', zipCode: '80202', phone: '303-555-0123' },
+    { id: '2', name: 'Jane Smith', email: 'jane@example.com', address: '456 Oak Ave', city: 'Boulder', zipCode: '80301', phone: '303-555-0456' }
+  ]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [useNewAddress, setUseNewAddress] = useState(true);
 
   const [cardNumber, setCardNumber] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
@@ -350,37 +356,99 @@ export default function CartAndCheckout({
 
           {step === 'shipping' && (
             <div className="space-y-6" id="ch_step_shipping">
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm text-left">
-                <h3 className="font-extrabold text-slate-950 text-md tracking-tight border-b border-slate-100 pb-3 mb-5">Shipping Address</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
-                    <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="e.g. John Doe" className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="e.g. j.doe@gmail.com" className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Street Address *</label>
-                    <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="e.g. 1045 Broadway St" className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">City *</label>
-                    <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="e.g. Denver" className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Postal Code *</label>
-                    <input type="text" value={zipCode} onChange={(e) => setZipCode(e.target.value)} placeholder="e.g. 80203" className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-mono" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
-                    <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. 303-555-0192" className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+              {/* Saved Addresses Section */}
+              {savedAddresses.length > 0 && (
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                  <h3 className="font-extrabold text-slate-950 text-md tracking-tight border-b border-slate-100 pb-3 mb-4">Saved Addresses</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {savedAddresses.map(addr => (
+                      <button
+                        key={addr.id}
+                        onClick={() => {
+                          setSelectedAddressId(addr.id);
+                          setCustomerName(addr.name);
+                          setEmail(addr.email);
+                          setAddress(addr.address);
+                          setCity(addr.city);
+                          setZipCode(addr.zipCode);
+                          setPhone(addr.phone);
+                          setUseNewAddress(false);
+                        }}
+                        className={`p-4 rounded-2xl border-2 text-left transition-all ${selectedAddressId === addr.id ? 'border-slate-900 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                        <p className={`font-bold text-xs ${selectedAddressId === addr.id ? 'text-white' : 'text-slate-900'}`}>{addr.name}</p>
+                        <p className={`text-[11px] mt-1 ${selectedAddressId === addr.id ? 'text-slate-300' : 'text-slate-500'}`}>{addr.address}</p>
+                        <p className={`text-[11px] ${selectedAddressId === addr.id ? 'text-slate-300' : 'text-slate-500'}`}>{addr.city} • {addr.zipCode}</p>
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => {
+                        setSelectedAddressId(null);
+                        setUseNewAddress(true);
+                        setCustomerName('');
+                        setEmail('');
+                        setAddress('');
+                        setCity('');
+                        setZipCode('');
+                        setPhone('');
+                      }}
+                      className="p-4 rounded-2xl border-2 border-dashed border-slate-300 text-left transition-all hover:border-slate-400 flex items-center justify-center text-slate-600 hover:text-slate-700">
+                      <span className="font-bold text-xs">+ Add New Address</span>
+                    </button>
                   </div>
                 </div>
-                <div className="mt-5 pt-5 border-t border-slate-100 text-xs text-slate-500">
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Note to Artisan</label>
-                  <textarea value={artisanNote} onChange={(e) => setArtisanNote(e.target.value)} rows={3} placeholder="Write special instructions for your order..." className="w-full text-xs sm:text-sm px-3.5 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+              )}
+
+              {/* Address Entry Form */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <h3 className="font-extrabold text-slate-950 text-md tracking-tight border-b border-slate-100 pb-3 mb-5">{selectedAddressId && !useNewAddress ? 'Edit Shipping Address' : 'Enter Shipping Address'}</h3>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-2">Full Name *</label>
+                      <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="e.g. John Doe" className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-2">Email Address *</label>
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="e.g. j.doe@gmail.com" className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-2">Street Address *</label>
+                    <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="e.g. 1045 Broadway St" className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-2">City *</label>
+                      <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="e.g. Denver" className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-2">State/Province</label>
+                      <input type="text" placeholder="e.g. CO" className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-2">Postal Code *</label>
+                      <input type="text" value={zipCode} onChange={(e) => setZipCode(e.target.value)} placeholder="e.g. 80203" className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-mono" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-2">Phone Number *</label>
+                    <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. 303-555-0192" className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans" />
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-4">
+                    <label className="flex items-center gap-2 text-xs cursor-pointer">
+                      <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-slate-300 text-slate-900" />
+                      <span className="font-semibold text-slate-700">Save this address for future orders</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-5 border-t border-slate-100">
+                  <label className="block text-xs font-bold text-slate-700 mb-2">Special Instructions (Optional)</label>
+                  <textarea value={artisanNote} onChange={(e) => setArtisanNote(e.target.value)} rows={3} placeholder="e.g., Leave at front door, apartment number, gate code, etc." className="w-full text-xs sm:text-sm px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:outline-none bg-white font-sans resize-none" />
                 </div>
               </div>
             </div>
