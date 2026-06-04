@@ -150,10 +150,13 @@ export interface SavedAddress {
 }
 
 export interface LoggedUser {
+  id: string; // Supabase user ID
   name: string;
   email: string;
   phoneNumber?: string;
   role: 'ADMIN' | 'BUYER';
   profileImage?: string;
+  email_verified: boolean;
   addresses: SavedAddress[];
+  created_at?: string;
 }

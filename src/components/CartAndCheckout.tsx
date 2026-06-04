@@ -58,7 +58,7 @@ export default function CartAndCheckout({
   const [zipCode, setZipCode] = useState('');
   const [phone, setPhone] = useState('');
   const [artisanNote, setArtisanNote] = useState('');
-  const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
+  const shippingMethod: 'standard' | 'express' = 'standard';
   const [savedAddresses, setSavedAddresses] = useState<Array<{id: string; name: string; email: string; address: string; city: string; zipCode: string; phone: string}>>([
     { id: '1', name: 'John Doe', email: 'john@example.com', address: '123 Main St', city: 'Denver', zipCode: '80202', phone: '303-555-0123' },
     { id: '2', name: 'Jane Smith', email: 'jane@example.com', address: '456 Oak Ave', city: 'Boulder', zipCode: '80301', phone: '303-555-0456' }

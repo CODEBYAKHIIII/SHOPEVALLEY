@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LoggedUser, SavedAddress } from '../types';
 import { Plus, Edit2, Trash2, MapPin, Phone, Mail, Check, X } from 'lucide-react';
 
@@ -9,13 +9,20 @@ interface ProfilePageProps {
 
 export default function ProfilePage({ currentUser, onUpdateUser }: ProfilePageProps) {
   const [editingProfile, setEditingProfile] = useState(false);
-  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
   
   // Profile edit state
   const [editName, setEditName] = useState(currentUser?.name || '');
   const [editEmail, setEditEmail] = useState(currentUser?.email || '');
   const [editPhone, setEditPhone] = useState(currentUser?.phoneNumber || '');
+
+  useEffect(() => {
+    if (currentUser) {
+      setEditName(currentUser.name);
+      setEditEmail(currentUser.email);
+      setEditPhone(currentUser.phoneNumber || '');
+    }
+  }, [currentUser]);
 
   // Address form state
   const [addressLabel, setAddressLabel] = useState('');
@@ -55,6 +62,11 @@ export default function ProfilePage({ currentUser, onUpdateUser }: ProfilePagePr
     // Check max 5 addresses
     if (currentUser.addresses.length >= 5) {
       alert('Maximum 5 addresses allowed');
+      return;
+    }
+
+    if (!addressFullName.trim() || !addressPhone.trim() || !addressStreet.trim() || !addressCity.trim() || !addressState.trim() || !addressZip.trim()) {
+      alert('Please fill in all required address fields.');
       return;
     }
 

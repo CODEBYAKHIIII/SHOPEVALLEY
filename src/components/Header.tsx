@@ -569,6 +569,18 @@ export default function Header({
                       <span>Notifications</span>
                     </button>
 
+                    {/* Addresses */}
+                    <button 
+                      onClick={() => {
+                        setShowAccountPopover(false);
+                        onNavigate('addresses');
+                      }}
+                      className="w-full h-12 px-4 hover:bg-slate-50 text-slate-700 font-extrabold text-xs flex items-center gap-3.5 transition-colors border-b border-slate-100 last:border-0 rounded-lg cursor-pointer"
+                    >
+                      <MapPin className="w-5 h-5 text-amber-500 shrink-0" />
+                      <span>Addresses</span>
+                    </button>
+
                     {/* Logout */}
                     {currentUser ? (
                       <button 

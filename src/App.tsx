@@ -13,6 +13,7 @@ import LoginScreen from './components/LoginScreen';
 import AdminPanel from './components/AdminPanel';
 import ProductDetailView from './components/ProductDetailView';
 import ProfilePage from './components/ProfilePage';
+import AddressesPage from './components/AddressesPage';
 import MyOrdersPage from './components/MyOrdersPage';
 import NotificationsPage from './components/NotificationsPage';
 import { PRODUCTS, VENDORS } from './data';
@@ -167,19 +168,8 @@ export default function App() {
   const [locationDistance, setLocationDistance] = useState<number>(50); // Default to check within 50 miles radius
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
 
-  // User Authentication State
-  const [currentUser, setCurrentUser] = useState<LoggedUser | null>(() => {
-    const cached = localStorage.getItem('shopevalley_auth_user');
-    return cached ? JSON.parse(cached) : null;
-  });
-
-  useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem('shopevalley_auth_user', JSON.stringify(currentUser));
-    } else {
-      localStorage.removeItem('shopevalley_auth_user');
-    }
-  }, [currentUser]);
+  // User Authentication State (managed by Supabase)
+  const [currentUser, setCurrentUser] = useState<LoggedUser | null>(null);
 
   // Sync state changes to localStorage
   useEffect(() => {
@@ -722,6 +712,13 @@ export default function App() {
           />
         ) : null}
 
+        {route.path === 'addresses' ? (
+          <AddressesPage
+            currentUser={currentUser}
+            onUpdateUser={setCurrentUser}
+          />
+        ) : null}
+
         {route.path === 'my-orders' ? (
           <MyOrdersPage 
             orders={orders}
@@ -879,9 +876,7 @@ export default function App() {
             sectionProducts = products.filter(p => p.originalPrice && p.originalPrice > p.price);
           } else if (sectionId === 'special-offers') {
             title = 'Special Offers';
-            subtitleText: 'Premium bundle deals and curated value gift packs with high direct savings.';
-            title = 'Special Offers';
-            subtitle = 'High value handpicked combo packs and direct value-added bundle promotions.';
+            subtitle = 'Premium bundle deals and curated value gift packs with high direct savings.';
             sectionProducts = products.filter(p => p.category === 'Combo Offers');
           } else {
             title = 'Top Brands';

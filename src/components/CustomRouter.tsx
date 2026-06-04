@@ -74,6 +74,8 @@ export function parseHash(hash: string): RouteState {
     routeState.path = 'my-orders';
   } else if (segments[0] === 'notifications') {
     routeState.path = 'notifications';
+  } else if (segments[0] === 'addresses') {
+    routeState.path = 'addresses';
   } else {
     routeState.path = '/';
   }
